@@ -4,6 +4,9 @@ import Cell from './Cell';
 class Grid extends React.Component {
     constructor(props){
         super(props);
+        this.state = {
+            nextInt: 1
+        }
         this.level = props.level;
         this.size = this.level * this.level;
         this.cells = new Array();
@@ -17,7 +20,19 @@ class Grid extends React.Component {
     }
 
     handleClick(i){
-        //TODO: check the clicked cell contains right content. disable it if yes. otherwise warn.
+        //check the clicked cell contains right content. disable it if yes. otherwise warn.
+        const userInt = this.cells[i];
+        if (userInt == this.state.nextInt){
+            if (userInt == this.size) {
+                alert("Done!");
+                return;
+            }
+            this.cells[i] = 0;
+            this.setState({
+                nextInt: this.state.nextInt++
+            });
+            this.forceUpdate();
+        }
     }
 
     render() {
