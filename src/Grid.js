@@ -6,8 +6,14 @@ class Grid extends React.Component {
         super(props);
         this.level = props.level;
         this.size = this.level * this.level;
-        this.cells = new Array(this.size).fill(0);
-        //TODO: initialize the grid.
+        this.cells = new Array();
+        //initialize the grid.
+        while (this.cells.length < this.size) {
+            let randomNumber = Math.floor(Math.random() * this.size) + 1;
+            if (!this.cells.includes(randomNumber)) {
+                this.cells.push(randomNumber);
+            }
+        }
     }
 
     handleClick(i){
@@ -15,33 +21,25 @@ class Grid extends React.Component {
     }
 
     render() {
-        // return (
-        //     <div>
-        //         {this.cells.forEach((cell, index) => {
-        //             if (index%this.level == 0) {
-        //                 const row = index/this.level;
-        //                 return (
-        //                     <div className="grid-row">
-        //                         {this.cells.slice(index, index+this.level-1).forEach((cell, index) => {
-        //                             const i = index+this.level*row;
-        //                             return (
-        //                                 <Cell content={cell}
-        //                                     onClick={() => this.handleClick(i)}/>
-        //                             );
-        //                         })}
-        //                     </div>
-        //                 );
-        //             }
-        //         })}
-        //     </div>
-        // );
-        return(
+        const grid = this.cells.map((cell, index) => {
+                        if (index%this.level == 0) {
+                            const row = index/this.level;
+                            return (
+                                <div className="grid-row">
+                                    {this.cells.slice(index, index+parseInt(this.level)).map((cell, rowIndex) => {
+                                        const i = rowIndex+this.level*row;
+                                        return (
+                                            <Cell content={cell}
+                                                onClick={() => this.handleClick(i)}/>
+                                        );
+                                    })}
+                                </div>
+                            );
+                        }
+                    });
+        return (
             <div>
-                <div className="grid-row">
-                {this.cells.forEach((cell, index) => {
-                    return <Cell content={cell} onClick={() => this.handleClick(index)}/>;
-                })}
-                </div>
+                {grid}
             </div>
         );
     }
